@@ -45,7 +45,13 @@ Build macOS executables:
 ./scripts/build_macos.sh
 ```
 
-Outputs are written to `dist/`. The Windows script creates `amd64` and `arm64` `.exe` files. The macOS script creates `amd64` and `arm64` binaries, and also creates a universal binary when `lipo` is available.
+Build Linux executables:
+
+```sh
+./scripts/build_linux.sh
+```
+
+Outputs are written to `dist/`. The Windows script creates `amd64` and `arm64` `.exe` files. The macOS script creates `amd64` and `arm64` binaries, and also creates a universal binary when `lipo` is available. The Linux script creates `amd64` and `arm64` binaries.
 
 ## Features
 
