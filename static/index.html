@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#101316">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-title" content="LAN Transfer">
+    <title>LAN File Transfer</title>
+    <link rel="manifest" href="/app.webmanifest">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.svg">
+    <link rel="stylesheet" href="/app.css">
+  </head>
+  <body>
+    <div class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Trusted LAN file transfer</p>
+          <h1>Nearby peers</h1>
+        </div>
+        <div class="actions">
+          <button id="scanBtn" class="primary">Scan network</button>
+          <button id="localBtn">Local files</button>
+        </div>
+      </header>
+
+      <main class="layout">
+        <section class="mapPanel">
+          <canvas id="peerCanvas" width="1100" height="680" aria-label="Network peer map"></canvas>
+          <div class="legend">
+            <span><b class="dot self"></b>This device</span>
+            <span><b class="dot peer"></b>Peer</span>
+            <span><b class="dot browser"></b>Browser only</span>
+            <span><b class="dot quiet"></b>Waiting</span>
+          </div>
+        </section>
+
+        <aside class="side">
+          <div class="identity">
+            <span id="statusLight"></span>
+            <div>
+              <strong id="deviceName">Starting...</strong>
+              <small id="deviceRoot"></small>
+            </div>
+          </div>
+          <section id="ipSection" class="collapsible collapsed">
+            <button id="ipToggle" class="sectionToggle" aria-expanded="false" aria-controls="ipList">
+              <span>Local IPs</span>
+              <b id="ipSummary">Hidden</b>
+            </button>
+            <div id="ipList" class="ipList"></div>
+          </section>
+          <section class="qrSection">
+            <h2>Connect QR</h2>
+            <a id="qrLink" class="qrCard" href="#" target="_blank" rel="noreferrer">
+              <img id="qrImage" alt="QR code to open this web app">
+              <span id="qrUrl"></span>
+            </a>
+          </section>
+          <div class="stats">
+            <div><strong id="peerCount">0</strong><span>Peers</span></div>
+            <div><strong id="transferCount">0</strong><span>Transfers</span></div>
+          </div>
+          <section>
+            <h2>Activity</h2>
+            <ul id="activity" class="activity"></ul>
+          </section>
+          <section>
+            <h2>Transfers</h2>
+            <div id="transferList" class="transferList"></div>
+          </section>
+        </aside>
+      </main>
+    </div>
+
+    <div id="fileModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="finderWindow">
+        <div class="finderTitlebar">
+          <div class="trafficLights" aria-hidden="true">
+            <span class="red"></span><span class="yellow"></span><span class="green"></span>
+          </div>
+          <div class="finderTitle">
+            <strong id="fileTitle">File browser</strong>
+            <small id="fileScope">Files</small>
+          </div>
+          <button id="closeFiles" class="iconBtn" aria-label="Close">x</button>
+        </div>
+        <div class="finderBody">
+          <aside class="finderSidebar">
+            <button id="rootBtn" class="sideChoice active">Shared folder</button>
+            <button id="upBtn" class="sideChoice">Parent folder</button>
+            <button id="uploadBtn" class="sideChoice">Upload files</button>
+            <button id="newFolderBtn" class="sideChoice">New folder</button>
+            <input id="uploadInput" type="file" multiple hidden>
+          </aside>
+          <section class="finderMain">
+            <div class="finderToolbar">
+              <div id="breadcrumb" class="breadcrumb"></div>
+              <div class="finderControls">
+                <input id="fileSearch" class="searchInput" type="search" placeholder="Search">
+                <select id="sortSelect" class="sortSelect" aria-label="Sort files">
+                  <option value="name">Name</option>
+                  <option value="type">Kind</option>
+                  <option value="modified">Date modified</option>
+                  <option value="size">Size</option>
+                </select>
+                <div class="segmented" role="group" aria-label="View">
+                  <button id="listViewBtn" class="active">List</button>
+                  <button id="gridViewBtn">Grid</button>
+                </div>
+              </div>
+            </div>
+            <div id="dropZone" class="dropZone">Drop files here to upload to the current folder</div>
+            <div class="fileHeader">
+              <span>Name</span><span>Kind</span><span>Modified</span><span>Size</span>
+            </div>
+            <div id="fileList" class="fileList"></div>
+            <div class="finderStatus"><span id="fileStatus">0 items</span><span id="filePath"></span></div>
+          </section>
+        </div>
+      </div>
+      <div id="fileContextMenu" class="contextMenu hidden" role="menu">
+        <button id="contextOpen" role="menuitem">Open</button>
+        <button id="contextDownload" role="menuitem">Download</button>
+      </div>
+    </div>
+    <div id="editorModal" class="modal hidden" role="dialog" aria-modal="true">
+      <div class="editorWindow">
+        <div class="finderTitlebar">
+          <div class="trafficLights" aria-hidden="true">
+            <span class="red"></span><span class="yellow"></span><span class="green"></span>
+          </div>
+          <div class="finderTitle">
+            <strong id="editorTitle">Editor</strong>
+            <small id="editorMeta">Unsaved changes will stay in this window until saved.</small>
+          </div>
+          <button id="closeEditor" class="iconBtn" aria-label="Close">x</button>
+        </div>
+        <div class="editorToolbar">
+          <button id="saveEditor" class="primary">Save</button>
+          <button id="downloadEditor">Download</button>
+          <span id="editorStatus" class="muted">Ready</span>
+        </div>
+        <textarea id="editorText" spellcheck="false"></textarea>
+      </div>
+    </div>
+    <input id="browserSendInput" type="file" multiple hidden>
+    <script src="/app.js"></script>
+  </body>
+</html>

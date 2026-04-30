@@ -1,0 +1,19 @@
+{
+  "name": "LAN File Transfer",
+  "short_name": "LAN Transfer",
+  "description": "Trusted local network file transfer.",
+  "start_url": "/?pwa=1",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#101316",
+  "theme_color": "#101316",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
